@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import ColorPicker from './features/color/components/ColorPicker.vue'
+import { ColorPicker } from './features/color';
 </script>
 
 <template>
