@@ -13,6 +13,8 @@ const color = ref('#ff0000');
 <style>
 .color-picker {
     position: relative;
+    width: 128px;
+    height: 128px;
 }
 
 .color-picker__input {
@@ -27,10 +29,24 @@ const color = ref('#ff0000');
 
 .color-picker__label {
     display: flex;
-    width: 64px;
-    height: 64px;
+    height: 100%;
+    width: 100%;
     border-radius: 100%;
-    background-color: red;
+    box-shadow: 0px 0px 1px 1px #0000001a;
+}
+
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0px var(--shadow-color);
+    }
+
+    100% {
+        box-shadow: 0 0 0 64px transparent;
+    }
 }
 </style>
 <!-- #endregion -->
@@ -39,7 +55,7 @@ const color = ref('#ff0000');
 <template>
     <div class="color-picker">
         <input type="color" id="color-picker" class="color-picker__input" v-model="color">
-        <label for="color-picker" class="color-picker__label" :style="{ backgroundColor: color }"></label>
+        <label for="color-picker" class="color-picker__label pulse" :style="{ backgroundColor: color, '--shadow-color': color }"></label>
     </div>
 </template>
 <!-- #endregion -->
