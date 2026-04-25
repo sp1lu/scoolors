@@ -1,10 +1,20 @@
 <!--#region script -->
 <script setup lang='ts'>
-// Dependencies
-import { ref } from 'vue'
+/* Dependencies */
+import { ref, watch } from 'vue'
 
-// Refs
+/* Refs */
 const color = ref('#ff0000');
+
+/* Output */
+const emit = defineEmits<{
+    (e: 'color-changed', value: string): void
+}>();
+
+/* Watch */
+watch(color, (value) => {
+    emit('color-changed', value);
+});
 
 </script>
 <!-- #endregion -->
@@ -55,7 +65,8 @@ const color = ref('#ff0000');
 <template>
     <div class="color-picker">
         <input type="color" id="color-picker" class="color-picker__input" v-model="color">
-        <label for="color-picker" class="color-picker__label pulse" :style="{ backgroundColor: color, '--shadow-color': color }"></label>
+        <label for="color-picker" class="color-picker__label pulse"
+            :style="{ backgroundColor: color, '--shadow-color': color }"></label>
     </div>
 </template>
 <!-- #endregion -->
