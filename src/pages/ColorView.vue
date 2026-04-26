@@ -6,7 +6,7 @@ import { computed, ref } from 'vue'
 import { generateColorScale, generateNeutralScale, hexToOklch } from '../features/color'
 
 /* UI */
-import { ColorPicker, ColorScale } from '../features/color'
+import { ColorInput, ColorPicker, ColorScale } from '../features/color'
 
 /* Refs */
 const color = ref('#3584e4');
@@ -40,6 +40,7 @@ const onColorChanged = (newColor: string) => {
 
 <template>
     <ColorPicker :color="color" @color-changed="onColorChanged" />
+    <ColorInput />
     <ColorScale class="primary-scale" :scale="primaryScale" />
     <ColorScale class="neutral-scale" :scale="neutralScale" />
 </template>

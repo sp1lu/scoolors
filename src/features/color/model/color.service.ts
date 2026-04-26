@@ -1,5 +1,5 @@
 /* Config */
-import { COLOR_STEPS } from '../config'
+import { COLOR_STEPS, LIGHTNESS_STEPS } from '../config'
 
 /* Types */
 import type { Oklch, Scale } from '../types'
@@ -10,7 +10,6 @@ import { parseOklch } from './color.parser'
 /* Lib */
 import { hexToRgb, mix, oklabToOklch, rgbToOklab } from '../lib'
 import { easeIn, easeOut } from '../../../shared/lib'
-import { LIGHTNESS_STEPS } from '../config/lightness_steps'
 
 /* Service */
 export function hexToOklch(hex: string): Oklch {
