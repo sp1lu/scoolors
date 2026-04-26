@@ -1,26 +1,45 @@
 <script setup lang='ts'>
 /** Dependencies */
-import { ref } from 'vue'
-
-/* Types */
-import type { Oklch, Scale } from '../features/color'
+import { computed, ref } from 'vue'
 
 /* Model */
-import { createScale, hexToOklch } from '../features/color'
+import { generateColorScale, generateNeutralScale, hexToOklch } from '../features/color'
 
 /* UI */
 import { ColorPicker, ColorScale } from '../features/color'
 
 /* Refs */
-const scale = ref<Scale>({});
+const color = ref('#3584e4');
+
+/* Computed */
+const oklch = computed(() => hexToOklch(color.value));
+const primaryScale = computed(() => generateColorScale(oklch.value));
+const neutralScale = computed(() => generateNeutralScale(oklch.value));
+
 /* Methods */
-const onColorChanged = (color: string) => {
-    const oklch: Oklch = hexToOklch(color);
-    scale.value = createScale(oklch);
+const onColorChanged = (newColor: string) => {
+    color.value = newColor;
 }
 </script>
 
+<style>
+.primary-scale {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.neutral-scale {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+</style>
+
 <template>
-    <ColorPicker @color-changed="onColorChanged" />
-    <ColorScale :scale="scale" />
+    <ColorPicker :color="color" @color-changed="onColorChanged" />
+    <ColorScale class="primary-scale" :scale="primaryScale" />
+    <ColorScale class="neutral-scale" :scale="neutralScale" />
 </template>

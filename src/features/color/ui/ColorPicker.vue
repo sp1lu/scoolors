@@ -1,10 +1,9 @@
 <!--#region script -->
 <script setup lang='ts'>
-/* Dependencies */
-import { ref, watch } from 'vue'
-
-/* Refs */
-const color = ref('#ff0000');
+/* Inputs */
+const props = defineProps<{
+    color: string
+}>();
 
 /* Output */
 const emit = defineEmits<{
@@ -12,9 +11,14 @@ const emit = defineEmits<{
 }>();
 
 /* Watch */
-watch(color, (value) => {
+// watch(() => props.color, (value) => {
+//     emit('color-changed', value);
+// });
+
+const onInput = (event: Event) => {
+    const value = (event.target as HTMLInputElement).value;
     emit('color-changed', value);
-});
+}
 
 </script>
 <!-- #endregion -->
@@ -64,9 +68,9 @@ watch(color, (value) => {
 <!--#region template -->
 <template>
     <div class="color-picker">
-        <input type="color" id="color-picker" class="color-picker__input" v-model="color">
+        <input type="color" id="color-picker" class="color-picker__input" :value="props.color" @input="onInput">
         <label for="color-picker" class="color-picker__label pulse"
-            :style="{ backgroundColor: color, '--shadow-color': color }"></label>
+            :style="{ backgroundColor: props.color, '--shadow-color': props.color }"></label>
     </div>
 </template>
 <!-- #endregion -->

@@ -8,8 +8,9 @@ import type { Oklch, Scale } from '../types'
 import { parseOklch } from './color.parser'
 
 /* Lib */
-import { hexToRgb, oklabToOklch, rgbToOklab } from '../lib'
-import { clamp } from '../../../shared/lib'
+import { hexToRgb, mix, oklabToOklch, rgbToOklab } from '../lib'
+import { easeIn, easeOut } from '../../../shared/lib'
+import { LIGHTNESS_STEPS } from '../config/lightness_steps'
 
 /* Service */
 export function hexToOklch(hex: string): Oklch {
@@ -18,16 +19,55 @@ export function hexToOklch(hex: string): Oklch {
     return parseOklch(oklabToOklch(lab));
 }
 
-export function createScale(base: Oklch): Scale {
-    const scale: Record<string, Oklch> = {};
+export function generateColorScale(base: Oklch): Scale {
+    const scale: Scale = {};
 
-    for (const [key, delta] of COLOR_STEPS) {
-        scale[key] = {
-            l: clamp(base.l + delta, 0, 1),
-            c: base.c * (key === 500 ? 1 : .9),
-            h: base.h
+    const white: Oklch = {
+        l: 0.98,
+        c: base.c * 0.05,
+        h: base.h
+    }
+
+    const black: Oklch = {
+        l: 0.08,
+        c: base.c * 0.15,
+        h: base.h
+    }
+
+    for (const step of COLOR_STEPS) {
+        if (step === 500) {
+            scale[step] = base
+            continue
+        }
+
+        if (step < 500) {
+            const t = (500 - step) / 400
+            scale[step] = mix(base, white, easeOut(t))
+        } else {
+            const t = (step - 500) / 400
+            scale[step] = mix(base, black, easeIn(t))
         }
     }
 
     return scale;
+}
+
+export function generateNeutralScale(base: Oklch): Scale {
+    const scale = {} as Scale
+
+    const MAX_CHROMA = base.c * 0.08
+
+    for (const step of COLOR_STEPS) {
+        const t = (step - 100) / 800
+
+        const chromaFactor = Math.exp(-4 * Math.pow(t - 0.5, 2))
+
+        scale[step] = {
+            l: LIGHTNESS_STEPS.get(step) ?? .85,
+            c: MAX_CHROMA * chromaFactor,
+            h: base.h
+        }
+    }
+
+    return scale
 }

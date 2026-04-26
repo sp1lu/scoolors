@@ -1,1 +1,2 @@
-export * from './color_conversion.lib.ts'
+export * from './color_conversion.ts'
+export * from './color_mix.ts'
