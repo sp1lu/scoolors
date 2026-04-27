@@ -10,16 +10,11 @@ const emit = defineEmits<{
     (e: 'color-changed', value: string): void
 }>();
 
-/* Watch */
-// watch(() => props.color, (value) => {
-//     emit('color-changed', value);
-// });
-
+/* Methods */
 const onInput = (event: Event) => {
     const value = (event.target as HTMLInputElement).value;
     emit('color-changed', value);
 }
-
 </script>
 <!-- #endregion -->
 

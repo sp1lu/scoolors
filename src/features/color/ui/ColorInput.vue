@@ -1,15 +1,23 @@
 <script setup lang='ts'>
-/* Dependencies */
-import { ref } from 'vue'
+/* Props */
+const props = defineProps<{
+    values: string[]
+}>();
 
-/* Config */
-import { COLOR_SPACES } from '../config'
+/* Output */
+const emit = defineEmits<{
+    (e: 'value-changed', value: string): void
+}>();
 
-const selectedSpace = ref<string>();
+/* Methods */
+const onChange = (event: Event) => {
+    const value = (event.target as HTMLInputElement).value;
+    emit('value-changed', value);
+}
 </script>
 
 <template>
-    <select v-model="selectedSpace">
-         <option v-for="space in COLOR_SPACES" :key="space.id" :value=space.id>{{ space.id }}</option>
+    <select :value="props.values[0]" @change="onChange">
+        <option v-for="value in props.values" :key="value" :value=value>{{ value }}</option>
     </select>
 </template>

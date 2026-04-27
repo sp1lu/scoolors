@@ -1,3 +1,5 @@
+import type { Oklch } from "../types";
+
 export function hexToRgb(hex: string): { r: number, g: number, b: number } {
     const clean: string = hex.replace('#', '');
 
@@ -42,4 +44,115 @@ export function oklabToOklch({ L, A, B }: { L: number; A: number; B: number }): 
     if (H < 0) H += 360
 
     return { l: L, c: C, h: H }
+}
+
+export function oklchToOklab({ l, c, h }: { l: number; c: number; h: number }) {
+    const hr = (h * Math.PI) / 180;
+
+    return {
+        L: l,
+        A: c * Math.cos(hr),
+        B: c * Math.sin(hr),
+    };
+}
+
+export function oklabToRgb({ L, A, B }: { L: number; A: number; B: number }) {
+    const l_ = L + 0.3963377774 * A + 0.2158037573 * B;
+    const m_ = L - 0.1055613458 * A - 0.0638541728 * B;
+    const s_ = L - 0.0894841775 * A - 1.2914855480 * B;
+
+    const l = l_ ** 3;
+    const m = m_ ** 3;
+    const s = s_ ** 3;
+
+    let r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+    let g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+    let b = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+
+    function linearToSrgb(x: number) {
+        return x <= 0.0031308
+            ? 12.92 * x
+            : 1.055 * Math.pow(x, 1 / 2.4) - 0.055;
+    }
+
+    r = linearToSrgb(r);
+    g = linearToSrgb(g);
+    b = linearToSrgb(b);
+
+    return {
+        r: Math.round(Math.min(Math.max(0, r), 1) * 255),
+        g: Math.round(Math.min(Math.max(0, g), 1) * 255),
+        b: Math.round(Math.min(Math.max(0, b), 1) * 255),
+    };
+}
+
+export function oklchToHsl(color: Oklch): { h: number; s: number; l: number } {
+    // OKLCH → OKLab
+    const hr = (color.h * Math.PI) / 180;
+    const L = color.l;
+    const A = color.c * Math.cos(hr);
+    const B = color.c * Math.sin(hr);
+
+    // OKLab → RGB
+    const l_ = L + 0.3963377774 * A + 0.2158037573 * B;
+    const m_ = L - 0.1055613458 * A - 0.0638541728 * B;
+    const s_ = L - 0.0894841775 * A - 1.2914855480 * B;
+
+    const l = l_ ** 3;
+    const m = m_ ** 3;
+    const s = s_ ** 3;
+
+    let r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+    let g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+    let b = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+
+    function linearToSrgb(x: number) {
+        return x <= 0.0031308
+            ? 12.92 * x
+            : 1.055 * Math.pow(x, 1 / 2.4) - 0.055;
+    }
+
+    r = linearToSrgb(r);
+    g = linearToSrgb(g);
+    b = linearToSrgb(b);
+
+    // clamp
+    r = Math.min(Math.max(0, r), 1);
+    g = Math.min(Math.max(0, g), 1);
+    b = Math.min(Math.max(0, b), 1);
+
+    // RGB → HSL
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+
+    let h = 0;
+    let sVal = 0;
+    const lVal = (max + min) / 2;
+
+    const d = max - min;
+
+    if (d !== 0) {
+        sVal = d / (1 - Math.abs(2 * lVal - 1));
+
+        switch (max) {
+            case r:
+                h = ((g - b) / d) % 6;
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+
+        h *= 60;
+        if (h < 0) h += 360;
+    }
+
+    return {
+        h: Math.round(h),
+        s: Math.round(sVal * 100),
+        l: Math.round(lVal * 100),
+    };
 }

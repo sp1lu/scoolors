@@ -8,7 +8,7 @@ import type { Oklch, Scale } from '../types'
 import { parseOklch } from './color.parser'
 
 /* Lib */
-import { hexToRgb, mix, oklabToOklch, rgbToOklab } from '../lib'
+import { hexToRgb, mix, oklabToOklch, oklabToRgb, oklchToOklab, rgbToOklab } from '../lib'
 import { easeIn, easeOut } from '../../../shared/lib'
 
 /* Service */
@@ -16,6 +16,23 @@ export function hexToOklch(hex: string): Oklch {
     const rgb = hexToRgb(hex);
     const lab = rgbToOklab(rgb);
     return parseOklch(oklabToOklch(lab));
+}
+
+export function oklchToHex(color: Oklch) {
+    const lab = oklchToOklab(color);
+    const { r, g, b } = oklabToRgb(lab);
+
+    return (
+        "#" +
+        [r, g, b]
+            .map(v => v.toString(16).padStart(2, "0"))
+            .join("")
+    );
+}
+
+export function oklchToRgb(color: Oklch) {
+    const lab = oklchToOklab(color);
+    return oklabToRgb(lab);
 }
 
 export function generateColorScale(base: Oklch): Scale {
