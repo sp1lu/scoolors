@@ -12,19 +12,19 @@ const onBtnClick = (text: string) => {
 
 <style>
 .style-editor {
-    width: 350px;
+    /* width: 350px; */
 }
 
 .style-editor__text {
-    white-space: pre;
+    /* white-space: pre; */
 }
 </style>
 
 <template>
     <div class="style-editor">
-        <div class="style-editor__text">
-            {{ text }}
-        </div>
+        <code class="style-editor__text">
+            <pre>{{ text }}</pre>
+        </code>
         <div class="style-editor__actions">
             <button type="button" @click="onBtnClick(text)">COPY</button>
         </div>

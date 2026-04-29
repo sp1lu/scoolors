@@ -16,7 +16,7 @@ const oklch = computed(() => hexToOklch(color.value));
 const primaryScale = computed(() => generateColorScale(oklch.value));
 const neutralScale = computed(() => generateNeutralScale(oklch.value));
 
-const styleScale = computed(() => generateStyleFromScale(primaryScale.value, 'primary', 'hex'));
+const styleScale = computed(() => generateStyleFromScale(primaryScale.value, 'primary', 'oklch'));
 
 
 /* Watch */

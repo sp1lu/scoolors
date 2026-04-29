@@ -108,7 +108,7 @@ export function generateStyleFromScale(scale: Scale, styleKey: string, type: 'he
             break;
     }
 
-    return str;
+    return str += '}';
 }
 
 export function generateOklchStyleFromScale(scale: Scale, styleKey: string): string {
