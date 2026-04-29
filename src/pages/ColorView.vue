@@ -3,7 +3,7 @@
 import { computed, ref, watch } from 'vue'
 
 /* Model */
-import { COLOR_SPACES, generateColorScale, generateNeutralScale, hexToOklch, type Scale } from '../features/color'
+import { COLOR_SPACES, generateColorScale, generateNeutralScale, generateStyleFromScale, hexToOklch, StyleEditor, type Scale } from '../features/color'
 
 /* UI */
 import { ColorInput, ColorPicker, ColorScale } from '../features/color'
@@ -16,10 +16,13 @@ const oklch = computed(() => hexToOklch(color.value));
 const primaryScale = computed(() => generateColorScale(oklch.value));
 const neutralScale = computed(() => generateNeutralScale(oklch.value));
 
+const styleScale = computed(() => generateStyleFromScale(primaryScale.value, 'primary', 'hex'));
+
+
 /* Watch */
-watch(primaryScale, (s: Scale) => {
-    console.log(s);    
-})
+watch(primaryScale, (scale: Scale) => {
+    // console.log(generateStyleFromScale(scale, 'primary'));
+});
 /* Methods */
 const onColorChanged = (newColor: string) => {
     color.value = newColor;
@@ -45,6 +48,13 @@ const onSpaceChanged = (selectedSpace: string) => {
 .neutral-scale {
     position: fixed;
     top: 50%;
+    left: 80px;
+    transform: translateY(-50%);
+}
+
+.style-editor {
+    position: fixed;
+    top: 50%;
     right: 0;
     transform: translateY(-50%);
 }
@@ -56,4 +66,5 @@ const onSpaceChanged = (selectedSpace: string) => {
     <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
     <ColorScale class="primary-scale" :scale="primaryScale" />
     <ColorScale class="neutral-scale" :scale="neutralScale" />
+    <StyleEditor class="style-editor" :text="styleScale" />
 </template>

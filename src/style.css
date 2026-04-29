@@ -295,6 +295,18 @@ code {
   }
 } */
 
+:root {
+	--primary-100: #f5f9fe;
+	--primary-200: #e9f2fd;
+	--primary-300: #c6dcfa;
+	--primary-400: #8cb8f2;
+	--primary-500: #3584e4;
+	--primary-600: #307ad4;
+	--primary-700: #235da5;
+	--primary-800: #0e315b;
+	--primary-900: #000206;
+}
+
 body {
   display: flex;
   align-items: center;

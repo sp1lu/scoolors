@@ -2,7 +2,7 @@
 import { COLOR_STEPS, LIGHTNESS_STEPS } from '../config'
 
 /* Types */
-import type { Oklch, Scale } from '../types'
+import type { Hex, Oklch, Rgb, Scale } from '../types'
 
 /* Model */
 import { parseOklch } from './color.parser'
@@ -13,24 +13,24 @@ import { easeIn, easeOut } from '../../../shared/lib'
 
 /* Service */
 export function hexToOklch(hex: string): Oklch {
-    const rgb = hexToRgb(hex);
+    const rgb: Rgb = hexToRgb(hex);
     const lab = rgbToOklab(rgb);
     return parseOklch(oklabToOklch(lab));
 }
 
-export function oklchToHex(color: Oklch) {
+export function oklchToHex(color: Oklch): Hex {
     const lab = oklchToOklab(color);
-    const { r, g, b } = oklabToRgb(lab);
+    const { r, g, b }: Rgb = oklabToRgb(lab);
 
     return (
         "#" +
         [r, g, b]
             .map(v => v.toString(16).padStart(2, "0"))
             .join("")
-    );
+    ) as Hex;
 }
 
-export function oklchToRgb(color: Oklch) {
+export function oklchToRgb(color: Oklch): Rgb {
     const lab = oklchToOklab(color);
     return oklabToRgb(lab);
 }
@@ -86,4 +86,48 @@ export function generateNeutralScale(base: Oklch): Scale {
     }
 
     return scale
+}
+
+export function convertToHexScale(scale: Scale<Oklch>): Scale<Hex> {
+    return Object.entries(scale).reduce((acc: Scale<Hex>, [key, value]: [string, Oklch]) => {
+        acc[key] = `${oklchToHex(value)}`;
+        return acc;
+    }, {} as Scale<Hex>);
+}
+
+export function generateStyleFromScale(scale: Scale, styleKey: string, type: 'hex' | 'oklch'): string {
+    let str: string = ':root {\n';
+
+    switch (type) {
+        case 'oklch':
+            str += generateOklchStyleFromScale(scale, styleKey);
+            break;
+
+        default:
+            str += generateHexStyleFromScale(convertToHexScale(scale), styleKey);
+            break;
+    }
+
+    return str;
+}
+
+export function generateOklchStyleFromScale(scale: Scale, styleKey: string): string {
+    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Oklch]) => {
+        acc += `\t--${styleKey}-${key}: oklch(${value.l.toFixed(3)} ${value.c.toFixed(3)} ${value.h.toFixed(3)});\n`;
+        return acc;
+    }, '');
+}
+
+export function generateHexStyleFromScale(scale: Scale<Hex>, styleKey: string): string {
+    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Hex]) => {
+        acc += `\t--${styleKey}-${key}: ${value};\n`;
+        return acc;
+    }, '');
+}
+
+export function generateRgbStyleFromScale(scale: Scale<Rgb>, styleKey: string): string {
+    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Rgb]) => {
+        acc += `\t--${styleKey}-${key}: rgb(${value.r} ${value.g} ${value.b});\n`;
+        return acc;
+    }, '');
 }
