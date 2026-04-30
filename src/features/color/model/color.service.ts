@@ -2,13 +2,13 @@
 import { COLOR_STEPS, LIGHTNESS_STEPS } from '../config'
 
 /* Types */
-import type { Hex, Oklch, Rgb, Scale } from '../types'
+import type { Hex, Hsl, Oklch, Rgb, Scale } from '../types'
 
 /* Model */
 import { parseOklch } from './color.parser'
 
 /* Lib */
-import { hexToRgb, mix, oklabToOklch, oklabToRgb, oklchToOklab, rgbToOklab } from '../lib'
+import { hexToRgb, mix, oklabToOklch, oklabToRgb, oklchToHsl, oklchToOklab, rgbToOklab } from '../lib'
 import { easeIn, easeOut } from '../../../shared/lib'
 
 /* Service */
@@ -95,20 +95,46 @@ export function convertToHexScale(scale: Scale<Oklch>): Scale<Hex> {
     }, {} as Scale<Hex>);
 }
 
-export function generateStyleFromScale(scale: Scale, styleKey: string, type: 'hex' | 'oklch'): string {
+export function convertToRgbScale(scale: Scale<Oklch>): Scale<Rgb> {
+    return Object.entries(scale).reduce((acc: Scale<Rgb>, [key, value]: [string, Oklch]) => {
+        acc[key] = oklchToRgb(value);
+        return acc;
+    }, {} as Scale<Rgb>);
+}
+
+export function convertoHslScale(scale: Scale<Oklch>): Scale<Hsl> {
+    return Object.entries(scale).reduce((acc: Scale<Hsl>, [key, value]: [string, Oklch]) => {
+        acc[key] = oklchToHsl(value);
+        return acc;
+    }, {} as Scale<Hsl>)
+}
+
+export function generateRootStyleFromScales(scales: Scale[], keys: string[], type: string): string {
     let str: string = ':root {\n';
 
+    scales.forEach((scale: Scale, i: number) => {        
+        str += generateStyleFromScale(scale, keys[i], type);
+        if (i !== scales.length - 1) str += '\n';
+    });
+    
+    return str += '}';
+}
+
+export function generateStyleFromScale(scale: Scale, styleKey: string, type: string): string {
     switch (type) {
         case 'oklch':
-            str += generateOklchStyleFromScale(scale, styleKey);
-            break;
+            return generateOklchStyleFromScale(scale, styleKey);
+
+        case 'rgb':
+            return generateRgbStyleFromScale(convertToRgbScale(scale), styleKey);
+
+
+        case 'hsl':
+            return generateHslStyleFromScale(convertoHslScale(scale), styleKey);
 
         default:
-            str += generateHexStyleFromScale(convertToHexScale(scale), styleKey);
-            break;
+            return generateHexStyleFromScale(convertToHexScale(scale), styleKey);
     }
-
-    return str += '}';
 }
 
 export function generateOklchStyleFromScale(scale: Scale, styleKey: string): string {
@@ -128,6 +154,13 @@ export function generateHexStyleFromScale(scale: Scale<Hex>, styleKey: string): 
 export function generateRgbStyleFromScale(scale: Scale<Rgb>, styleKey: string): string {
     return Object.entries(scale).reduce((acc: string, [key, value]: [string, Rgb]) => {
         acc += `\t--${styleKey}-${key}: rgb(${value.r} ${value.g} ${value.b});\n`;
+        return acc;
+    }, '');
+}
+
+export function generateHslStyleFromScale(scale: Scale<Hsl>, styleKey: string): string {
+    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Hsl]) => {
+        acc += `\t--${styleKey}-${key}: hsl(${value.h} ${value.s} ${value.l});\n`;
         return acc;
     }, '');
 }

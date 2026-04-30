@@ -1,28 +1,26 @@
 <script setup lang='ts'>
-/** Dependencies */
-import { computed, ref, watch } from 'vue'
+/* Dependencies */
+import { computed, ref } from 'vue'
+
+/* Config */
+import { COLOR_SPACES } from '../features/color';
 
 /* Model */
-import { COLOR_SPACES, generateColorScale, generateNeutralScale, generateStyleFromScale, hexToOklch, StyleEditor, type Scale } from '../features/color'
+import { generateColorScale, generateNeutralScale, generateRootStyleFromScales, hexToOklch, StyleEditor } from '../features/color'
 
 /* UI */
 import { ColorInput, ColorPicker, ColorScale } from '../features/color'
 
 /* Refs */
 const color = ref('#3584e4');
+const colorSpace = ref(COLOR_SPACES[0]);
 
 /* Computed */
 const oklch = computed(() => hexToOklch(color.value));
 const primaryScale = computed(() => generateColorScale(oklch.value));
 const neutralScale = computed(() => generateNeutralScale(oklch.value));
+const styleScale = computed(() => generateRootStyleFromScales([primaryScale.value, neutralScale.value], ['primary', 'neutral'], colorSpace.value));
 
-const styleScale = computed(() => generateStyleFromScale(primaryScale.value, 'primary', 'oklch'));
-
-
-/* Watch */
-watch(primaryScale, (scale: Scale) => {
-    // console.log(generateStyleFromScale(scale, 'primary'));
-});
 /* Methods */
 const onColorChanged = (newColor: string) => {
     color.value = newColor;
@@ -33,7 +31,7 @@ const onStyleChanged = (selectedStyle: string) => {
 }
 
 const onSpaceChanged = (selectedSpace: string) => {
-    console.log(selectedSpace);
+    colorSpace.value = selectedSpace;
 }
 </script>
 
