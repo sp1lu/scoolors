@@ -2,24 +2,28 @@
 /* Dependencies */
 import { computed, ref } from 'vue'
 
+/* Types */
+import type { ColorStyle, ColorSpace } from '../features/color'
+
 /* Config */
-import { COLOR_SPACES } from '../features/color';
+import { COLOR_SPACES, COLOR_STYLES } from '../features/color'
 
 /* Model */
-import { generateColorScale, generateNeutralScale, generateRootStyleFromScales, hexToOklch, StyleEditor } from '../features/color'
+import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
 
 /* UI */
-import { ColorInput, ColorPicker, ColorScale } from '../features/color'
+import { ColorInput, ColorPicker, ColorScale, StyleEditor } from '../features/color'
 
 /* Refs */
 const color = ref('#3584e4');
-const colorSpace = ref(COLOR_SPACES[0]);
+const colorSpace = ref<ColorSpace>(COLOR_SPACES[0]);
+const colorStyle = ref<ColorStyle>(COLOR_STYLES[0]);
 
 /* Computed */
 const oklch = computed(() => hexToOklch(color.value));
 const primaryScale = computed(() => generateColorScale(oklch.value));
 const neutralScale = computed(() => generateNeutralScale(oklch.value));
-const styleScale = computed(() => generateRootStyleFromScales([primaryScale.value, neutralScale.value], ['primary', 'neutral'], colorSpace.value));
+const styleScale = computed(() => generateRootStyleFromScales([primaryScale.value, neutralScale.value], ['primary', 'neutral'], colorSpace.value, colorStyle.value));
 
 /* Methods */
 const onColorChanged = (newColor: string) => {
@@ -27,11 +31,11 @@ const onColorChanged = (newColor: string) => {
 }
 
 const onStyleChanged = (selectedStyle: string) => {
-    console.log(selectedStyle);
+    colorStyle.value = selectedStyle as ColorStyle;
 }
 
 const onSpaceChanged = (selectedSpace: string) => {
-    colorSpace.value = selectedSpace;
+    colorSpace.value = selectedSpace as ColorSpace;
 }
 </script>
 
@@ -59,9 +63,9 @@ const onSpaceChanged = (selectedSpace: string) => {
 </style>
 
 <template>
-    <ColorInput :values="['party', 'corporate', 'punk']" @value-changed="onStyleChanged" />
     <ColorPicker :color="color" @color-changed="onColorChanged" />
     <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
+    <ColorInput :values="COLOR_STYLES" @value-changed="onStyleChanged" />
     <ColorScale class="primary-scale" :scale="primaryScale" />
     <ColorScale class="neutral-scale" :scale="neutralScale" />
     <StyleEditor class="style-editor" :text="styleScale" />

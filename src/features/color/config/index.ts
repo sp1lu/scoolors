@@ -1,3 +1,6 @@
 export * from './color_spaces'
 export * from './color_steps'
+export * from './color_styles'
 export * from './lightness_steps'
+export * from './style_schemas'
+export * from './style_wrappers'

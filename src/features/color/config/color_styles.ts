@@ -1,0 +1,1 @@
+export const COLOR_STYLES: string[] = ['css', 'scss', 'sass', 'less', 'json'] as const;

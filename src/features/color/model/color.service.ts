@@ -1,8 +1,8 @@
 /* Config */
-import { COLOR_STEPS, LIGHTNESS_STEPS } from '../config'
+import { COLOR_STEPS, LIGHTNESS_STEPS, STYLE_SCHEMAS, STYLE_WRAPPERS } from '../config'
 
 /* Types */
-import type { Hex, Hsl, Oklch, Rgb, Scale } from '../types'
+import type { ColorSpace, ColorStyle, Hex, Hsl, Oklch, Rgb, Scale } from '../types'
 
 /* Model */
 import { parseOklch } from './color.parser'
@@ -109,58 +109,60 @@ export function convertoHslScale(scale: Scale<Oklch>): Scale<Hsl> {
     }, {} as Scale<Hsl>)
 }
 
-export function generateRootStyleFromScales(scales: Scale[], keys: string[], type: string): string {
-    let str: string = ':root {\n';
+export function generateRootStyleFromScales(scales: Scale[], keys: string[], space: ColorSpace, style: ColorStyle): string {
+    const wrapper = STYLE_WRAPPERS.get(style);
+    if (!wrapper) return '';
 
-    scales.forEach((scale: Scale, i: number) => {        
-        str += generateStyleFromScale(scale, keys[i], type);
-        if (i !== scales.length - 1) str += '\n';
+    let content = '';
+
+    scales.forEach((scale: Scale, i: number) => {
+        content += generateStyleFromScale(scale, space, style, keys[i]);
     });
-    
-    return str += '}';
+  
+    if (style === 'json') content = content.replace(/,(\s*)$/, '$1');
+
+    return wrapper(content);
 }
 
-export function generateStyleFromScale(scale: Scale, styleKey: string, type: string): string {
-    switch (type) {
+export function generateStyleFromScale(scale: Scale, space: ColorSpace, style: ColorStyle, key: string): string {
+    const schema: string | undefined = STYLE_SCHEMAS.get(style);
+
+    if (!schema) return '';
+
+    switch (space) {
         case 'oklch':
-            return generateOklchStyleFromScale(scale, styleKey);
+            return Object.entries(scale as Scale<Oklch>).reduce((acc: string, [k, v]: [string, Oklch]) => {
+                const value = `oklch(${v.l.toFixed(3)} ${v.c.toFixed(3)} ${v.h.toFixed(3)})`;
+                acc += replaceTokens(schema, { key: `${key}-${k}`, value });
+                return acc;
+            }, '');
 
         case 'rgb':
-            return generateRgbStyleFromScale(convertToRgbScale(scale), styleKey);
+            return Object.entries(convertToRgbScale(scale)).reduce((acc: string, [k, v]: [string, Rgb]) => {
+                const value = `rgb(${v.r} ${v.g} ${v.b})`;
+                acc += replaceTokens(schema, { key: `${key}-${k}`, value });
+                return acc;
+            }, '');
 
 
         case 'hsl':
-            return generateHslStyleFromScale(convertoHslScale(scale), styleKey);
+            return Object.entries(convertoHslScale(scale)).reduce((acc: string, [k, v]: [string, Hsl]) => {
+                const value = `hsl(${v.h} ${v.s} ${v.l})`;
+                acc += replaceTokens(schema, { key: `${key}-${k}`, value });
+                return acc;
+            }, '');
 
         default:
-            return generateHexStyleFromScale(convertToHexScale(scale), styleKey);
+            return Object.entries(convertToHexScale(scale)).reduce((acc: string, [k, v]: [string, Hex]) => {
+                const value = `${v}`;
+                acc += replaceTokens(schema, { key: `${key}-${k}`, value });
+                return acc;
+            }, '');
     }
 }
 
-export function generateOklchStyleFromScale(scale: Scale, styleKey: string): string {
-    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Oklch]) => {
-        acc += `\t--${styleKey}-${key}: oklch(${value.l.toFixed(3)} ${value.c.toFixed(3)} ${value.h.toFixed(3)});\n`;
-        return acc;
-    }, '');
-}
-
-export function generateHexStyleFromScale(scale: Scale<Hex>, styleKey: string): string {
-    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Hex]) => {
-        acc += `\t--${styleKey}-${key}: ${value};\n`;
-        return acc;
-    }, '');
-}
-
-export function generateRgbStyleFromScale(scale: Scale<Rgb>, styleKey: string): string {
-    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Rgb]) => {
-        acc += `\t--${styleKey}-${key}: rgb(${value.r} ${value.g} ${value.b});\n`;
-        return acc;
-    }, '');
-}
-
-export function generateHslStyleFromScale(scale: Scale<Hsl>, styleKey: string): string {
-    return Object.entries(scale).reduce((acc: string, [key, value]: [string, Hsl]) => {
-        acc += `\t--${styleKey}-${key}: hsl(${value.h} ${value.s} ${value.l});\n`;
-        return acc;
-    }, '');
+function replaceTokens(template: string, values: Record<string, string>) {
+    return template.replace(/{{(.*?)}}/g, (_, key) => {
+        return values[key.trim()] ?? '';
+    });
 }
