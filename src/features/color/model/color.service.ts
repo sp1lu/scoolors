@@ -118,7 +118,7 @@ export function generateRootStyleFromScales(scales: Scale[], keys: string[], spa
     scales.forEach((scale: Scale, i: number) => {
         content += generateStyleFromScale(scale, space, style, keys[i]);
     });
-  
+
     if (style === 'json') content = content.replace(/,(\s*)$/, '$1');
 
     return wrapper(content);
@@ -165,4 +165,18 @@ function replaceTokens(template: string, values: Record<string, string>) {
     return template.replace(/{{(.*?)}}/g, (_, key) => {
         return values[key.trim()] ?? '';
     });
+}
+
+export function generateStyleVariablesFromScales(scales: Scale[], variables: string[]): Record<string, string> {
+    return scales.reduce((acc: Record<string, string>, scale: Scale, i: number) => {
+        Object.assign(acc, generateStyleVariablesFromScale(scale, variables[i]));
+        return acc;
+    }, {});
+}
+
+export function generateStyleVariablesFromScale(scale: Scale, variable: string): Record<string, string> {
+    return Object.entries(scale).reduce((acc: Record<string, string>, [key, oklch]: [string, Oklch]) => {
+        acc[`--${variable}-${key}`] = `oklch(${oklch.l.toFixed(3)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(3)})`;
+        return acc;
+    }, {})
 }

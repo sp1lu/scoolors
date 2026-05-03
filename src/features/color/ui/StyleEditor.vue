@@ -6,8 +6,6 @@ import css from 'highlight.js/lib/languages/css'
 import scss from 'highlight.js/lib/languages/scss'
 import less from 'highlight.js/lib/languages/less'
 import json from 'highlight.js/lib/languages/json'
-import 'highlight.js/styles/github.css'
-import 'highlight.js/styles/vs2015.css'
 
 hljs.registerLanguage('css', css);
 hljs.registerLanguage('scss', scss);
@@ -36,16 +34,8 @@ const onBtnClick = (text: string) => {
 </script>
 
 <style>
-.style-editor {
-    /* width: 350px; */
-}
-
-.style-editor__text {
-    /* white-space: pre; */
-}
-
-.yellow {
-    color: yellow;
+button {
+    background-color: var(--primary-500);
 }
 </style>
 

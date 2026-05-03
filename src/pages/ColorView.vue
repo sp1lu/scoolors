@@ -1,29 +1,38 @@
 <script setup lang='ts'>
 /* Dependencies */
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 /* Types */
 import type { ColorStyle, ColorSpace } from '../features/color'
 
 /* Config */
-import { COLOR_SPACES, COLOR_STYLES } from '../features/color'
+import { COLOR_SPACES, COLOR_STYLES, generateStyleVariablesFromScales } from '../features/color'
 
 /* Model */
 import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
 
 /* UI */
 import { ColorInput, ColorPicker, ColorScale, StyleEditor } from '../features/color'
+import { ThemeToggle, useTheme } from '../features/theme'
 
 /* Refs */
 const color = ref('#3584e4');
 const colorSpace = ref<ColorSpace>(COLOR_SPACES[0]);
 const colorStyle = ref<ColorStyle>(COLOR_STYLES[0]);
 
+/* COmposables */
+const { setStyle } = useTheme();
+
 /* Computed */
 const oklch = computed(() => hexToOklch(color.value));
 const primaryScale = computed(() => generateColorScale(oklch.value));
 const neutralScale = computed(() => generateNeutralScale(oklch.value));
 const styleScale = computed(() => generateRootStyleFromScales([primaryScale.value, neutralScale.value], ['primary', 'neutral'], colorSpace.value, colorStyle.value));
+
+watch([primaryScale, neutralScale], (scales) => {
+    const style = generateStyleVariablesFromScales(scales, ['primary', 'neutral']);
+    setStyle(style);
+}, { immediate: true });
 
 /* Methods */
 const onColorChanged = (newColor: string) => {
@@ -138,5 +147,6 @@ const onSpaceChanged = (selectedSpace: string) => {
             <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
             <ColorInput :values="COLOR_STYLES" @value-changed="onStyleChanged" />
         </StyleEditor>
+        <ThemeToggle />
     </div>
 </template>
