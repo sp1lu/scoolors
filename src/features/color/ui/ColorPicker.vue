@@ -37,6 +37,7 @@ const onInput = (event: Event) => {
 }
 
 .color-picker__label {
+    cursor: pointer;
     display: flex;
     height: 100%;
     width: 100%;

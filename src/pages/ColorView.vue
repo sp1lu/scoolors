@@ -14,6 +14,7 @@ import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyle
 /* UI */
 import { ColorInput, ColorPicker, ColorScale, StyleEditor } from '../features/color'
 import { ThemeToggle, useTheme } from '../features/theme'
+import { Footer, Header } from '../shared/ui'
 
 /* Refs */
 const color = ref('#3584e4');
@@ -49,86 +50,83 @@ const onSpaceChanged = (selectedSpace: string) => {
 </script>
 
 <style>
-/* .primary-scale {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
+.color-view {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100dvw;
+    min-height: 100dvh;
+    padding: 0 4%;
 }
 
-.neutral-scale {
-    position: fixed;
-    top: 50%;
-    left: 80px;
-    transform: translateY(-50%);
-}
-
-.style-editor {
-    position: fixed;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-} */
-
-/* .color-view,
-.color-scales {
+.color-view__content {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
-} */
-
-.color-view {
-    width: 100dvw;
 }
 
-.color-picker-wrapper,
-.color-scales,
-.style-editor {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.color-picker-wrapper {
-    left: 50%;
-}
-
-.color-scales {
-    left: 0;
+.content-center {
+    position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 450px;
 }
 
-.style-editor {
+.dialog-toggle {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dialog-toggle__icon {
+    display: flex;
+    height: 24px;
+    width: 24px;
+    mask-image: url('/icons/download_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
+    background-color: var(--neutral-900);
+}
+
+.dialog {
+    position: relative;
+    padding: 0;
+    border: 1px solid var(--neutral-300);
+    border-radius: 8px;
+
+    &::backdrop {
+        background-color: oklch(from var(--neutral-900) l c h / .5);
+    }
+}
+
+.dialog__close {
+    position: absolute;
+    top: 0;
     right: 0;
+    z-index: 9;
+}
+
+.logo {
+    color: var(--primary-500);
 }
 
 @media screen and (max-width: 768px) {
-    .color-view {
-        display: flex;
+    .color-view__content {
         flex-direction: column;
-    }
-
-    .color-picker-wrapper,
-    .color-scales,
-    .style-editor {
-        position: unset;
-        transform: none;
+        justify-content: start;
     }
 
     .color-picker-wrapper {
         order: 1;
-        display: block;
     }
 
-    .color-scales {
+    .primary-scale {
         order: 2;
-        display: flex;
-        flex-direction: column;
     }
 
-    .style-editor {
+    .neutral-scale {
         order: 3;
     }
 }
@@ -136,17 +134,39 @@ const onSpaceChanged = (selectedSpace: string) => {
 
 <template>
     <div class="color-view">
-        <div class="color-scales">
+        <Header>
+            <template #center>
+                <span class="logo">C00LORS</span>
+            </template>
+            <template #right>
+                <ThemeToggle />
+            </template>
+        </Header>
+        <div class="color-view__content">
             <ColorScale class="primary-scale" :scale="primaryScale" />
+            <div class="content-center">
+                <div class="color-picker-wrapper">
+                    <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" />
+                </div>
+                <button type="button" class="dialog-toggle" commandfor="code-dialog" command="show-modal">
+                    <span class="dialog-toggle__icon"></span>
+                </button>
+            </div>
             <ColorScale class="neutral-scale" :scale="neutralScale" />
         </div>
-        <div class="color-picker-wrapper">
-            <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" />
-        </div>
-        <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle">
-            <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
-            <ColorInput :values="COLOR_STYLES" @value-changed="onStyleChanged" />
-        </StyleEditor>
-        <ThemeToggle />
+        <Footer>
+            <template #center>© {{ new Date().getFullYear() }} C00lors&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;<a
+                    href="https://daviderivolta.com/" target="_blank">Davide
+                    Rivolta</a>&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;<a href="https://github.com/sp1lu/coolors"
+                    target="_blank">GitHub</a>
+            </template>
+        </Footer>
+        <dialog id="code-dialog" class="dialog">
+            <button type="button" class="dialog__close" commandfor="code-dialog" command="close">CLOSE</button>
+            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle">
+                <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
+                <ColorInput :values="COLOR_STYLES" @value-changed="onStyleChanged" />
+            </StyleEditor>
+        </dialog>
     </div>
 </template>

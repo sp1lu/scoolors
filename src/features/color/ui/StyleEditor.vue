@@ -34,8 +34,20 @@ const onBtnClick = (text: string) => {
 </script>
 
 <style>
-button {
-    background-color: var(--primary-500);
+.style-editor {
+    position: relative;
+    min-width: 500px;
+}
+
+.style-editor__text {
+    margin: 0;
+    padding: 48px;
+}
+
+.style-editor__actions {
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 </style>
 
@@ -43,8 +55,8 @@ button {
     <div class="style-editor">
         <pre class="style-editor__text hljs" v-html="highlighted"></pre>
         <div class="style-editor__actions">
-            <button type="button" @click="onBtnClick(text)">COPY</button>
             <slot></slot>
+            <button type="button" @click="onBtnClick(text)">COPY</button>
         </div>
     </div>
 </template>
