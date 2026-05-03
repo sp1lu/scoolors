@@ -10,10 +10,10 @@ import { COLOR_SPACES, COLOR_STYLES, generateStyleVariablesFromScales } from '..
 
 /* Model */
 import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
+import { ThemeToggle, useTheme } from '../features/theme'
 
 /* UI */
 import { ColorInput, ColorPicker, ColorScale, StyleEditor } from '../features/color'
-import { ThemeToggle, useTheme } from '../features/theme'
 import { Footer, Header } from '../shared/ui'
 
 /* Refs */
@@ -155,10 +155,10 @@ const onSpaceChanged = (selectedSpace: string) => {
             <ColorScale class="neutral-scale" :scale="neutralScale" />
         </div>
         <Footer>
-            <template #center>© {{ new Date().getFullYear() }} C00lors&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;<a
-                    href="https://daviderivolta.com/" target="_blank">Davide
-                    Rivolta</a>&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;<a href="https://github.com/sp1lu/coolors"
-                    target="_blank">GitHub</a>
+            <template #center>
+                © {{ new Date().getFullYear() }} C00LORS
+                <a href="https://daviderivolta.com/" target="_blank">Davide Rivolta</a>
+                <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
             </template>
         </Footer>
         <dialog id="code-dialog" class="dialog">

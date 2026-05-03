@@ -39,13 +39,13 @@ export function generateColorScale(base: Oklch): Scale {
     const scale: Scale = {};
 
     const white: Oklch = {
-        l: 0.98,
+        l: 0.95,
         c: base.c * 0.05,
         h: base.h
     }
 
     const black: Oklch = {
-        l: 0.08,
+        l: 0.12,
         c: base.c * 0.15,
         h: base.h
     }
@@ -71,15 +71,25 @@ export function generateColorScale(base: Oklch): Scale {
 export function generateNeutralScale(base: Oklch): Scale {
     const scale = {} as Scale
 
-    const MAX_CHROMA = base.c * 0.08
+    const MAX_CHROMA = base.c * 0.03
 
     for (const step of COLOR_STEPS) {
-        const t = (step - 100) / 800
 
+        if (step === Math.min(...COLOR_STEPS)) {
+            scale[step] = { l: 1, c: 0, h: 0 }
+            continue
+        }
+
+        if (step === Math.max(...COLOR_STEPS)) {
+            scale[step] = { l: 0, c: 0, h: 0 }
+            continue
+        }
+
+        const t = (step - 100) / 800
         const chromaFactor = Math.exp(-4 * Math.pow(t - 0.5, 2))
 
         scale[step] = {
-            l: LIGHTNESS_STEPS.get(step) ?? .85,
+            l: LIGHTNESS_STEPS.get(step) ?? 0.85,
             c: MAX_CHROMA * chromaFactor,
             h: base.h
         }
