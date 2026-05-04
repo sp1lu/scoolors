@@ -21,7 +21,7 @@ const color = ref('#3584e4');
 const colorSpace = ref<ColorSpace>(COLOR_SPACES[0]);
 const colorStyle = ref<ColorStyle>(COLOR_STYLES[0]);
 
-/* COmposables */
+/* Composables */
 const { setStyle } = useTheme();
 
 /* Computed */
@@ -80,13 +80,18 @@ const onSpaceChanged = (selectedSpace: string) => {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    height: 32px;
+    width: 32px;
+    margin: 0;
+    padding: 0;
 }
 
 .dialog-toggle__icon {
     display: flex;
-    height: 24px;
-    width: 24px;
+    height: 100%;
+    width: 100%;
     mask-image: url('/icons/download_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
+    mask-size: contain;
     background-color: var(--neutral-900);
 }
 
@@ -101,11 +106,24 @@ const onSpaceChanged = (selectedSpace: string) => {
     }
 }
 
-.dialog__close {
+.dialog-close {
     position: absolute;
     top: 0;
     right: 0;
     z-index: 9;
+    height: 20px;
+    width: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.dialog-close__icon {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    mask-image: url('/icons/close_small_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
+    mask-size: contain;
+    background-color: var(--neutral-900);
 }
 
 .logo {
@@ -162,7 +180,9 @@ const onSpaceChanged = (selectedSpace: string) => {
             </template>
         </Footer>
         <dialog id="code-dialog" class="dialog">
-            <button type="button" class="dialog__close" commandfor="code-dialog" command="close">CLOSE</button>
+            <button type="button" class="dialog-close" commandfor="code-dialog" command="close">
+                <span class="dialog-close__icon"></span>
+            </button>
             <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle">
                 <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
                 <ColorInput :values="COLOR_STYLES" @value-changed="onStyleChanged" />

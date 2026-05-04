@@ -16,14 +16,35 @@ const props = defineProps<{
 }
 
 .color-scale__element {
-    width: 50px;
+    width: 100px;
     height: 50px;
     border: 1px solid transparent;
+}
+
+.color-scale__element:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.color-scale__element:last-child {
+    border-radius: 0 0 8px 8px;
 }
 
 @media screen and (max-width: 768px) {
     .color-scale {
         display: flex;
+        width: 100%;
+    }
+
+    .color-scale__element {
+        width: calc(100% / 9);
+    }
+
+    .color-scale__element:first-child {
+        border-radius: 8px 0 0 8px;
+    }
+
+    .color-scale__element:last-child {
+        border-radius: 0 8px 8px 0;
     }
 }
 </style>
