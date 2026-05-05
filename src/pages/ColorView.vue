@@ -6,15 +6,15 @@ import { computed, ref, watch } from 'vue'
 import type { ColorStyle, ColorSpace } from '../features/color'
 
 /* Config */
-import { COLOR_SPACES, COLOR_STYLES, generateStyleVariablesFromScales } from '../features/color'
+import { COLOR_SPACES, COLOR_STYLES, convertToHexScale, generateStyleVariablesFromScales } from '../features/color'
 
 /* Model */
 import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
 import { ThemeToggle, useTheme } from '../features/theme'
 
 /* UI */
-import { ColorInput, ColorPicker, ColorScale, StyleEditor } from '../features/color'
-import { Footer, Header } from '../shared/ui'
+import { ColorPicker, ColorScale, StyleEditor } from '../features/color'
+import { Footer, Header, Radio, Select } from '../shared/ui'
 
 /* Refs */
 const color = ref('#3584e4');
@@ -102,32 +102,48 @@ const onSpaceChanged = (selectedSpace: string) => {
     border-radius: 8px;
 
     &::backdrop {
-        background-color: oklch(from var(--neutral-900) l c h / .5);
+        background-color: oklch(from var(--primary-900) l c h / .5);
     }
 }
 
 .dialog-close {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 8px;
+    right: 8px;
     z-index: 9;
     height: 20px;
     width: 20px;
     margin: 0;
     padding: 0;
+    background-color: transparent;
+    border: none;
 }
 
 .dialog-close__icon {
     display: flex;
     height: 100%;
     width: 100%;
-    mask-image: url('/icons/close_small_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
+    mask-image: url('/icons/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
     mask-size: contain;
     background-color: var(--neutral-900);
 }
 
+.dialog__content {
+    padding: 24px;
+}
+
 .logo {
     color: var(--primary-500);
+}
+
+.title {
+    margin: 0;
+    font-size: 1.33rem;
+    font-weight: 500;
+}
+
+.radio-group {
+    margin: 16px 0;
 }
 
 @media screen and (max-width: 768px) {
@@ -161,7 +177,7 @@ const onSpaceChanged = (selectedSpace: string) => {
             </template>
         </Header>
         <div class="color-view__content">
-            <ColorScale class="primary-scale" :scale="primaryScale" />
+            <ColorScale class="primary-scale" :scale="convertToHexScale(primaryScale)" />
             <div class="content-center">
                 <div class="color-picker-wrapper">
                     <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" />
@@ -170,7 +186,7 @@ const onSpaceChanged = (selectedSpace: string) => {
                     <span class="dialog-toggle__icon"></span>
                 </button>
             </div>
-            <ColorScale class="neutral-scale" :scale="neutralScale" />
+            <ColorScale class="neutral-scale" :scale="convertToHexScale(neutralScale)" />
         </div>
         <Footer>
             <template #center>
@@ -183,10 +199,12 @@ const onSpaceChanged = (selectedSpace: string) => {
             <button type="button" class="dialog-close" commandfor="code-dialog" command="close">
                 <span class="dialog-close__icon"></span>
             </button>
-            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle">
-                <ColorInput :values="COLOR_SPACES" @value-changed="onSpaceChanged" />
-                <ColorInput :values="COLOR_STYLES" @value-changed="onStyleChanged" />
-            </StyleEditor>
+            <div class="dialog__content">
+                <p class="title">Export tokens</p>
+                <Radio :values="COLOR_STYLES" @radio-changed="onStyleChanged"></Radio>
+                <Select :label="'Color space'" :values="COLOR_SPACES" @value-changed="onSpaceChanged"></Select>
+            </div>
+            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle" />
         </dialog>
     </div>
 </template>

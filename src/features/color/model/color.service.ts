@@ -23,10 +23,10 @@ export function oklchToHex(color: Oklch): Hex {
     const { r, g, b }: Rgb = oklabToRgb(lab);
 
     return (
-        "#" +
+        '#' +
         [r, g, b]
-            .map(v => v.toString(16).padStart(2, "0"))
-            .join("")
+            .map(v => v.toString(16).padStart(2, '0').toUpperCase())
+            .join('')
     ) as Hex;
 }
 

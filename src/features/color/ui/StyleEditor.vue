@@ -44,23 +44,25 @@ const onBtnClick = (text: string) => {
     padding: 48px;
 }
 
-.style-editor__actions {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-
 .action-copy {
-    height: 20px;
-    width: 20px;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
     margin: 0;
-    padding: 0;
+    padding: 0 8px;
+    border: 1px solid var(--neutral-300);
+    background-color: var(--neutral-100);
+    border-radius: 8px;
+    height: 32px;
 }
 
 .action-copy__icon {
     display: flex;
-    height: 100%;
-    width: 100%;
+    height: 16px;
+    width: 16px;
     mask-image: url('/icons/content_copy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
     mask-size: contain;
     background-color: var(--neutral-900);
@@ -70,11 +72,9 @@ const onBtnClick = (text: string) => {
 <template>
     <div class="style-editor">
         <pre class="style-editor__text hljs" v-html="highlighted"></pre>
-        <div class="style-editor__actions">
-            <slot></slot>
-            <button type="button" class="action-copy" @click="onBtnClick(text)">
-                <span class="action-copy__icon"></span>
-            </button>
-        </div>
+        <button type="button" class="action-copy" @click="onBtnClick(text)">
+            <span class="action-copy__icon"></span>
+            <span class="action-copy__label">Copy tokens</span>
+        </button>
     </div>
 </template>
