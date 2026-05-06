@@ -8,13 +8,17 @@ import type { ColorStyle, ColorSpace } from '../features/color'
 /* Config */
 import { COLOR_SPACES, COLOR_STYLES, convertToHexScale, generateStyleVariablesFromScales } from '../features/color'
 
+/** Lib */
+import { copyToClipboard } from '../shared/lib'
+
 /* Model */
 import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
 import { ThemeToggle, useTheme } from '../features/theme'
+import { useSnackbars } from '../features/snackbar'
 
 /* UI */
 import { ColorPicker, ColorScale, StyleEditor } from '../features/color'
-import { Footer, Header, Radio, Select } from '../shared/ui'
+import { AppDialog, Footer, Header, Radio, Select } from '../shared/ui'
 
 /* Refs */
 const color = ref('#3584e4');
@@ -23,6 +27,7 @@ const colorStyle = ref<ColorStyle>(COLOR_STYLES[0]);
 
 /* Composables */
 const { setStyle } = useTheme();
+const { addSnackbar } = useSnackbars()
 
 /* Computed */
 const oklch = computed(() => hexToOklch(color.value));
@@ -47,9 +52,16 @@ const onStyleChanged = (selectedStyle: string) => {
 const onSpaceChanged = (selectedSpace: string) => {
     colorSpace.value = selectedSpace as ColorSpace;
 }
+
+const onCopyClicked = (text: string) => {
+    copyToClipboard(text)
+        .then(() => addSnackbar('Copied!'))
+}
 </script>
 
-<style>
+<style lang='scss'>
+@use '@/shared/styles' as *;
+
 .color-view {
     position: relative;
     display: flex;
@@ -67,65 +79,16 @@ const onSpaceChanged = (selectedSpace: string) => {
 }
 
 .content-center {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 450px;
-}
-
-.dialog-toggle {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 32px;
-    width: 32px;
-    margin: 0;
-    padding: 0;
+    gap: 40px;
 }
 
 .dialog-toggle__icon {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    mask-image: url('/icons/download_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
-    mask-size: contain;
-    background-color: var(--neutral-900);
-}
-
-.dialog {
-    position: relative;
-    padding: 0;
-    border: 1px solid var(--neutral-300);
-    border-radius: 8px;
-
-    &::backdrop {
-        background-color: oklch(from var(--primary-900) l c h / .5);
-    }
-}
-
-.dialog-close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 9;
-    height: 20px;
-    width: 20px;
-    margin: 0;
-    padding: 0;
-    background-color: transparent;
-    border: none;
-}
-
-.dialog-close__icon {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    mask-image: url('/icons/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
-    mask-size: contain;
-    background-color: var(--neutral-900);
+    @include mask-icon('/icons/download_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg', 16px);
+    background-color: var(--primary-500);
 }
 
 .dialog__content {
@@ -139,7 +102,7 @@ const onSpaceChanged = (selectedSpace: string) => {
 .title {
     margin: 0;
     font-size: 1.33rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .radio-group {
@@ -179,11 +142,11 @@ const onSpaceChanged = (selectedSpace: string) => {
         <div class="color-view__content">
             <ColorScale class="primary-scale" :scale="convertToHexScale(primaryScale)" />
             <div class="content-center">
-                <div class="color-picker-wrapper">
-                    <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" />
-                </div>
-                <button type="button" class="dialog-toggle" commandfor="code-dialog" command="show-modal">
+                <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" @text-copied="onCopyClicked" />
+                <button type="button" class="primary btn-icon dialog-toggle" commandfor="code-dialog"
+                    command="show-modal">
                     <span class="dialog-toggle__icon"></span>
+                    <span class="dialog-toggle__label">Export tokens</span>
                 </button>
             </div>
             <ColorScale class="neutral-scale" :scale="convertToHexScale(neutralScale)" />
@@ -195,16 +158,13 @@ const onSpaceChanged = (selectedSpace: string) => {
                 <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
             </template>
         </Footer>
-        <dialog id="code-dialog" class="dialog">
-            <button type="button" class="dialog-close" commandfor="code-dialog" command="close">
-                <span class="dialog-close__icon"></span>
-            </button>
+        <AppDialog>
             <div class="dialog__content">
                 <p class="title">Export tokens</p>
                 <Radio :values="COLOR_STYLES" @radio-changed="onStyleChanged"></Radio>
                 <Select :label="'Color space'" :values="COLOR_SPACES" @value-changed="onSpaceChanged"></Select>
             </div>
-            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle" />
-        </dialog>
+            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle" @text-copied="onCopyClicked" />
+        </AppDialog>
     </div>
 </template>

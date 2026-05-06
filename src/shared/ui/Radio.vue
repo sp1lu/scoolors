@@ -44,7 +44,7 @@ const onChange = (value: string) => {
 }
 
 .radio-element__input:checked+.radio-element__label {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--primary-500);
 }
 

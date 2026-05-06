@@ -25,15 +25,22 @@ const highlighted = computed(() => {
     } catch (error) {
         return props.text;
     }
-})
+});
+
+/* Emitters */
+const emit = defineEmits<{
+    (e: 'text-copied', value: string): void
+}>();
 
 /* Methods */
 const onBtnClick = (text: string) => {
-    navigator.clipboard.writeText(text)
+    emit('text-copied', text);
 }
 </script>
 
-<style>
+<style lang='scss'>
+@use '@/shared/styles' as *;
+
 .style-editor {
     position: relative;
     min-width: 500px;
@@ -48,23 +55,10 @@ const onBtnClick = (text: string) => {
     position: absolute;
     bottom: 8px;
     right: 8px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin: 0;
-    padding: 0 8px;
-    border: 1px solid var(--neutral-300);
-    background-color: var(--neutral-100);
-    border-radius: 8px;
-    height: 32px;
 }
 
 .action-copy__icon {
-    display: flex;
-    height: 16px;
-    width: 16px;
-    mask-image: url('/icons/content_copy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
-    mask-size: contain;
+    @include mask-icon('/icons/content_copy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg', 16px);
     background-color: var(--neutral-900);
 }
 </style>
@@ -72,7 +66,7 @@ const onBtnClick = (text: string) => {
 <template>
     <div class="style-editor">
         <pre class="style-editor__text hljs" v-html="highlighted"></pre>
-        <button type="button" class="action-copy" @click="onBtnClick(text)">
+        <button type="button" class="secondary btn-icon action-copy" @click="onBtnClick(text)">
             <span class="action-copy__icon"></span>
             <span class="action-copy__label">Copy tokens</span>
         </button>

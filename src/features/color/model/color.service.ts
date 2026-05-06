@@ -39,14 +39,14 @@ export function generateColorScale(base: Oklch): Scale {
     const scale: Scale = {};
 
     const white: Oklch = {
-        l: 0.95,
-        c: base.c * 0.05,
+        l: 0.98,
+        c: base.c * 0.15,
         h: base.h
     }
 
     const black: Oklch = {
-        l: 0.12,
-        c: base.c * 0.15,
+        l: 0.18,
+        c: base.c * 0.25,
         h: base.h
     }
 

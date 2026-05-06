@@ -295,7 +295,8 @@ code {
   }
 } */
 
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+@use './shared/styles' as *;
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 
 html,
 body {
@@ -304,17 +305,17 @@ body {
 }
 
 :root {
+  font-family: "Google Sans", sans-serif;
   color: var(--primary-900);
   font-size: 12px;
-  font-family: "Google Sans Flex", sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-button {
-  cursor: pointer;
+input {
+  font-family: "Google Sans", sans-serif;
 }
 
 a {

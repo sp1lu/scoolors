@@ -1,0 +1,8 @@
+@mixin mask-icon($url, $size: 16px) {
+    display: flex;
+    height: $size;
+    width: $size;
+    mask-image: url($url);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
