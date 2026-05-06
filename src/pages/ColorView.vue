@@ -55,7 +55,7 @@ const onSpaceChanged = (selectedSpace: string) => {
 
 const onCopyClicked = (text: string) => {
     copyToClipboard(text)
-        .then(() => addSnackbar('Copied!'))
+        .then(() => addSnackbar('\u{1F389} Copied!'))
 }
 </script>
 
@@ -140,7 +140,7 @@ const onCopyClicked = (text: string) => {
             </template>
         </Header>
         <div class="color-view__content">
-            <ColorScale class="primary-scale" :scale="convertToHexScale(primaryScale)" />
+            <ColorScale class="primary-scale" :scale="convertToHexScale(primaryScale)" @text-copied="onCopyClicked" />
             <div class="content-center">
                 <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" @text-copied="onCopyClicked" />
                 <button type="button" class="primary btn-icon dialog-toggle" commandfor="code-dialog"
@@ -149,7 +149,7 @@ const onCopyClicked = (text: string) => {
                     <span class="dialog-toggle__label">Export tokens</span>
                 </button>
             </div>
-            <ColorScale class="neutral-scale" :scale="convertToHexScale(neutralScale)" />
+            <ColorScale class="neutral-scale" :scale="convertToHexScale(neutralScale)" @text-copied="onCopyClicked" />
         </div>
         <Footer>
             <template #center>

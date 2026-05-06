@@ -10,7 +10,7 @@ const snackbars = ref<Snackbar[]>([]);
 /* Composable */
 export function useSnackbars() {
     const addSnackbar = (text: string): void => {
-        const id: string = `${text.replaceAll(' ', '_')}_${new Date().getTime()}`;
+        const id: string = crypto.randomUUID();
         snackbars.value.push({ id, text });
         setTimeout(() => removeSnackbar(id), 3000);
     }

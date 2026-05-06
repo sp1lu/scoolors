@@ -6,6 +6,14 @@ import type { Hex, Scale } from '../types'
 const props = defineProps<{
     scale: Scale<Hex>
 }>();
+
+/* Emitters */
+const emit = defineEmits<{
+    (e: 'text-copied', color: string): void
+}>();
+
+/* Methods */
+const onElementClick = (color: string) => emit('text-copied', color);
 </script>
 
 <style>
@@ -21,7 +29,7 @@ const props = defineProps<{
 .color-scale__element {
     cursor: pointer;
     width: 320px;
-    height: 48px;
+    height: 40px;
     display: grid;
     grid-template-columns: 1fr 4fr 2fr;
     border: 1px solid var(--neutral-500);
@@ -53,11 +61,7 @@ const props = defineProps<{
 
 <template>
     <ul class="color-scale">
-        <!-- <li class="color-scale__element" popovertarget="color-popover" v-for="(color, step) in scale" :key="step"
-            :style="{ backgroundColor: `oklch(${color.l * 100}% ${color.c} ${color.h})`, borderColor: color.l === 1 && color.c === 0 && color.h === 0 ? 'whitesmoke' : 'transparent' }">
-        </li> -->
-
-        <li class="color-scale__element" v-for="(color, step) in scale" :style="{ backgroundColor: color }">
+        <li class="color-scale__element" v-for="(color, step) in scale" :style="{ backgroundColor: color }" @click="onElementClick(color)">
             <div class="element__step">{{ step }}</div>
             <div class="element__bg"></div>
             <div class="element__color">{{ color }}</div>
