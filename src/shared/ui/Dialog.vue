@@ -1,4 +1,15 @@
-<style>
+<template>
+    <dialog id="code-dialog" class="dialog">
+        <button type="button" class="dialog-close" commandfor="code-dialog" command="close">
+            <span class="dialog-close__icon"></span>
+        </button>
+        <slot></slot>
+    </dialog>
+</template>
+
+<style lang='scss'>
+@use '@/shared/styles' as *;
+
 .dialog {
     position: relative;
     padding: 0;
@@ -12,32 +23,43 @@
 
 .dialog-close {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 4px;
+    right: 4px;
     z-index: 9;
-    height: 20px;
-    width: 20px;
+    height: 28px;
+    width: 28px;
     margin: 0;
     padding: 0;
+    border-radius: 8px;
     background-color: transparent;
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        background-color: var(--neutral-200);
+    }
+    
+    &:active {
+        background-color: var(--neutral-300);
+    }
 }
 
 .dialog-close__icon {
-    display: flex;
-    height: 100%;
-    width: 100%;
+    /* display: flex;
+    height: 16px;
+    width: 16px;
     mask-image: url('/icons/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg');
-    mask-size: contain;
+    mask-size: contain; */
+    @include mask-icon('/icons/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg', 16px);
     background-color: var(--neutral-900);
 }
-</style>
 
-<template>
-    <dialog id="code-dialog" class="dialog">
-        <button type="button" class="dialog-close" commandfor="code-dialog" command="close">
-            <span class="dialog-close__icon"></span>
-        </button>
-        <slot></slot>
-    </dialog>
-</template>
+@media screen and (max-width: 992px) {
+    .dialog {
+        width: 100%;
+        margin: auto 4%;
+    }
+}
+</style>

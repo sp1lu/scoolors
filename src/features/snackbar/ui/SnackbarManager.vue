@@ -14,10 +14,6 @@ const { snackbars, removeSnackbar } = useSnackbars();
 
 <style>
 .snackbar-manager {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
     padding: 24px;
     display: flex;
     flex-direction: column;

@@ -38,12 +38,22 @@ const onBtnClick = (text: string) => {
 }
 </script>
 
+<template>
+    <div class="style-editor">
+        <pre class="style-editor__text hljs" v-html="highlighted"></pre>
+        <button type="button" class="secondary btn-icon action-copy" @click="onBtnClick(text)">
+            <span class="action-copy__icon"></span>
+            <span class="action-copy__label">Copy tokens</span>
+        </button>
+    </div>
+</template>
+
 <style lang='scss'>
 @use '@/shared/styles' as *;
 
 .style-editor {
     position: relative;
-    min-width: 500px;
+    min-width: 496px;
 }
 
 .style-editor__text {
@@ -55,20 +65,17 @@ const onBtnClick = (text: string) => {
     position: absolute;
     bottom: 8px;
     right: 8px;
+    border-radius: 4px
 }
 
 .action-copy__icon {
     @include mask-icon('/icons/content_copy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg', 16px);
     background-color: var(--neutral-900);
 }
-</style>
 
-<template>
-    <div class="style-editor">
-        <pre class="style-editor__text hljs" v-html="highlighted"></pre>
-        <button type="button" class="secondary btn-icon action-copy" @click="onBtnClick(text)">
-            <span class="action-copy__icon"></span>
-            <span class="action-copy__label">Copy tokens</span>
-        </button>
-    </div>
-</template>
+@media screen and (max-width: 992px) {
+    .style-editor {
+        min-width: min-content;
+    }
+}
+</style>

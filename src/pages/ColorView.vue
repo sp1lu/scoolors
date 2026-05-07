@@ -13,11 +13,11 @@ import { copyToClipboard } from '../shared/lib'
 
 /* Model */
 import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
-import { ThemeToggle, useTheme } from '../features/theme'
+import { useTheme } from '../features/theme'
 import { useSnackbars } from '../features/snackbar'
 
 /* UI */
-import { ColorPicker, ColorScale, StyleEditor } from '../features/color'
+import { AppLogo, ColorPicker, ColorScale, StyleEditor } from '../features/color'
 import { AppDialog, Footer, Header, Radio, Select } from '../shared/ui'
 
 /* Refs */
@@ -59,6 +59,47 @@ const onCopyClicked = (text: string) => {
 }
 </script>
 
+<template>
+    <div class="color-view">
+        <Header>
+            <template #center>
+                <AppLogo />
+                <!-- <span class="logo">C00LORS</span> -->
+            </template>
+        </Header>
+        <div class="color-view__content">
+            <ColorScale class="primary-scale" :scale="convertToHexScale(primaryScale)" @text-copied="onCopyClicked" />
+            <div class="content-center">
+                <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged"
+                    @text-copied="onCopyClicked" />
+                <button type="button" class="primary btn-icon dialog-toggle" commandfor="code-dialog"
+                    command="show-modal">
+                    <span class="dialog-toggle__icon"></span>
+                    <span class="dialog-toggle__label">Export tokens</span>
+                </button>
+            </div>
+            <ColorScale class="neutral-scale" :scale="convertToHexScale(neutralScale)" @text-copied="onCopyClicked" />
+        </div>
+        <Footer>
+            <template #center>
+                <div class="footer__credits">
+                    <span>© {{ new Date().getFullYear() }} C00LORS</span><span>&#8226;</span>
+                    <a href="https://daviderivolta.com/" target="_blank">Davide Rivolta</a><span>&#8226;</span>
+                    <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
+                </div>
+            </template>
+        </Footer>
+        <AppDialog>
+            <div class="dialog__content">
+                <p class="title">Export tokens</p>
+                <Radio :values="COLOR_STYLES" @radio-changed="onStyleChanged"></Radio>
+                <Select :label="'Color space'" :values="COLOR_SPACES" @value-changed="onSpaceChanged"></Select>
+            </div>
+            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle" @text-copied="onCopyClicked" />
+        </AppDialog>
+    </div>
+</template>
+
 <style lang='scss'>
 @use '@/shared/styles' as *;
 
@@ -68,7 +109,7 @@ const onCopyClicked = (text: string) => {
     flex-direction: column;
     width: 100dvw;
     min-height: 100dvh;
-    padding: 0 4%;
+    padding: 0 8%;
 }
 
 .color-view__content {
@@ -109,62 +150,37 @@ const onCopyClicked = (text: string) => {
     margin: 16px 0;
 }
 
-@media screen and (max-width: 768px) {
+.footer__credits {
+    display: flex;
+    gap: 4px;
+}
+
+@media screen and (max-width: 992px) {
     .color-view__content {
         flex-direction: column;
         justify-content: start;
+        padding: 10% 0;
     }
 
-    .color-picker-wrapper {
+    .content-center {
         order: 1;
+        margin: 0 0 48px 0;
+        gap: 16px;
+        width: 100%;
     }
 
     .primary-scale {
         order: 2;
+        margin: 0 0 8px 0;
     }
 
     .neutral-scale {
         order: 3;
     }
+
+    .dialog-toggle {
+        height: 40px !important;
+        width: 100%;
+    }
 }
 </style>
-
-<template>
-    <div class="color-view">
-        <Header>
-            <template #center>
-                <span class="logo">C00LORS</span>
-            </template>
-            <template #right>
-                <ThemeToggle />
-            </template>
-        </Header>
-        <div class="color-view__content">
-            <ColorScale class="primary-scale" :scale="convertToHexScale(primaryScale)" @text-copied="onCopyClicked" />
-            <div class="content-center">
-                <ColorPicker class="color-picker" :color="color" @color-changed="onColorChanged" @text-copied="onCopyClicked" />
-                <button type="button" class="primary btn-icon dialog-toggle" commandfor="code-dialog"
-                    command="show-modal">
-                    <span class="dialog-toggle__icon"></span>
-                    <span class="dialog-toggle__label">Export tokens</span>
-                </button>
-            </div>
-            <ColorScale class="neutral-scale" :scale="convertToHexScale(neutralScale)" @text-copied="onCopyClicked" />
-        </div>
-        <Footer>
-            <template #center>
-                © {{ new Date().getFullYear() }} C00LORS
-                <a href="https://daviderivolta.com/" target="_blank">Davide Rivolta</a>
-                <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
-            </template>
-        </Footer>
-        <AppDialog>
-            <div class="dialog__content">
-                <p class="title">Export tokens</p>
-                <Radio :values="COLOR_STYLES" @radio-changed="onStyleChanged"></Radio>
-                <Select :label="'Color space'" :values="COLOR_SPACES" @value-changed="onSpaceChanged"></Select>
-            </div>
-            <StyleEditor class="style-editor" :text="styleScale" :language="colorStyle" @text-copied="onCopyClicked" />
-        </AppDialog>
-    </div>
-</template>

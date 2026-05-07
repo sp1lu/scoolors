@@ -55,7 +55,14 @@ const onElementClick = (color: string) => emit('text-copied', color);
     color: var(--neutral-100);   
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
+    .color-scale {
+        width: 100%;
+    }
+
+    .color-scale__element {
+        width: 100%;
+    }
 }
 </style>
 

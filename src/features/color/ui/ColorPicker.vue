@@ -21,6 +21,19 @@ const onBtnClick = (text: string) => {
 }
 </script>
 
+<template>
+    <div class="color-picker">
+        <input type="color" id="color-picker" class="color-picker__input" :value="props.color" @input="onInput">
+        <label for="color-picker" class="color-picker__label pulse"
+            :style="{ backgroundColor: props.color, '--shadow-color': props.color }">
+        </label>
+        <button type="button" class="btn-icon color-value" @click="onBtnClick(color)">
+            <span class="color-value__label">{{ props.color.toUpperCase() }}</span>
+            <span class="color-value__icon"></span>
+        </button>
+    </div>
+</template>
+
 <style lang='scss'>
 @use '@/shared/styles' as *;
 
@@ -84,17 +97,18 @@ const onBtnClick = (text: string) => {
         box-shadow: 0 0 0 64px transparent;
     }
 }
-</style>
 
-<template>
-    <div class="color-picker">
-        <input type="color" id="color-picker" class="color-picker__input" :value="props.color" @input="onInput">
-        <label for="color-picker" class="color-picker__label pulse"
-            :style="{ backgroundColor: props.color, '--shadow-color': props.color }">
-        </label>
-        <button type="button" class="btn-icon color-value" @click="onBtnClick(color)">
-            <span class="color-value__label">{{ props.color.toUpperCase() }}</span>
-            <span class="color-value__icon"></span>
-        </button>
-    </div>
-</template>
+@media screen and (max-width: 992px) {
+    .color-picker__label {
+        width: 25dvw;
+        height: 25dvw;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .color-picker__label {
+        width: 40dvw;
+        height: 40dvw;
+    }
+}
+</style>

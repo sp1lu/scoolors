@@ -1,3 +1,19 @@
+<template>
+    <div class="header">
+        <div class="header__left">
+            <slot name="left"></slot>
+        </div>
+
+        <div class="header__center">
+            <slot name="center"></slot>
+        </div>
+
+        <div class="header__right">
+            <slot name="right"></slot>
+        </div>
+    </div>
+</template>
+
 <style>
 .header {
     display: grid;
@@ -24,20 +40,17 @@
 .header__right {
     justify-content: end;
 }
+
+@media screen and (max-width: 992px) {
+    .header {
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+        padding: 16px 0;
+    }
+
+    .header>* {
+        justify-content: center;
+    }
+}
 </style>
-
-<template>
-    <div class="header">
-        <div class="header__left">
-            <slot name="left"></slot>
-        </div>
-
-        <div class="header__center">
-            <slot name="center"></slot>
-        </div>
-
-        <div class="header__right">
-            <slot name="right"></slot>
-        </div>
-    </div>
-</template>
