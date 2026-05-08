@@ -6,7 +6,7 @@ import { computed, ref, watch } from 'vue'
 import type { ColorStyle, ColorSpace } from '../features/color'
 
 /* Config */
-import { COLOR_SPACES, COLOR_STYLES, convertToHexScale, generateStyleVariablesFromScales } from '../features/color'
+import { COLOR_SPACES, COLOR_STYLES, convertToHexScale, createFavicon, generateStyleVariablesFromScales } from '../features/color'
 
 /** Lib */
 import { copyToClipboard } from '../shared/lib'
@@ -38,6 +38,7 @@ const styleScale = computed(() => generateRootStyleFromScales([primaryScale.valu
 watch([primaryScale, neutralScale], (scales) => {
     const style = generateStyleVariablesFromScales(scales, ['primary', 'neutral']);
     setStyle(style);
+    createFavicon(convertToHexScale(scales[0]));
 }, { immediate: true });
 
 /* Methods */
@@ -64,7 +65,6 @@ const onCopyClicked = (text: string) => {
         <Header>
             <template #center>
                 <AppLogo />
-                <!-- <span class="logo">C00LORS</span> -->
             </template>
         </Header>
         <div class="color-view__content">
@@ -83,7 +83,7 @@ const onCopyClicked = (text: string) => {
         <Footer>
             <template #center>
                 <div class="footer__credits">
-                    <span>© {{ new Date().getFullYear() }} C00LORS</span><span>&#8226;</span>
+                    <span>© {{ new Date().getFullYear() }} scoolors</span><span>&#8226;</span>
                     <a href="https://daviderivolta.com/" target="_blank">Davide Rivolta</a><span>&#8226;</span>
                     <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
                 </div>
@@ -134,10 +134,6 @@ const onCopyClicked = (text: string) => {
 
 .dialog__content {
     padding: 24px;
-}
-
-.logo {
-    color: var(--primary-500);
 }
 
 .title {

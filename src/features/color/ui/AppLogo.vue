@@ -8,7 +8,7 @@
             <li class="pictogram__stripe pictogram__mid"></li>
             <li class="pictogram__stripe pictogram__last"></li>
         </ul>
-        <span>C00LORS</span>
+        <span class="logotype">scoolors</span>
     </div>
 </template>
 
@@ -17,10 +17,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--primary-500);
 }
 
 .pictogram {
     padding: 0;
+    margin: 0;
     list-style: none;
 }
 
@@ -38,5 +40,10 @@
 .pictogram__stripe:last-child {
     border-radius: 0 0 2px 2px;
     background-color: var(--primary-700);
+}
+
+.logotype {
+    font-size: 2rem;
+    font-weight: 600;
 }
 </style>
