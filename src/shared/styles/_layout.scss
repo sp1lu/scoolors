@@ -1,3 +1,6 @@
 .view {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
     padding: 0 8%;
 }

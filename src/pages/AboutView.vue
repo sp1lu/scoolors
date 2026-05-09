@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 /* Components */
 import { AppLogo } from '../features/color'
-import { Header } from '../shared/ui'
+import { Footer, Header } from '../shared/ui'
 </script>
 
 <template>
@@ -66,16 +66,35 @@ import { Header } from '../shared/ui'
                 </p>
             </section>
         </div>
+
+        <Footer>
+            <template #center>
+                <div class="footer__credits">
+                    <span>© {{ new Date().getFullYear() }} scoolors</span><span>&#8226;</span>
+                    <a href="https://daviderivolta.com/" target="_blank">Davide Rivolta</a><span>&#8226;</span>
+                    <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
+                </div>
+            </template>
+        </Footer>
+
     </div>
 </template>
 
 <style>
 .about-view__content {
+    flex: 1;
     max-width: 600px;
     margin: 0 auto;
 }
 
 .about-section {
     margin: 0 0 40px 0;
+    text-align: center;
+}
+
+@media screen and (max-width: 576px) {
+    .about-section {
+        text-align: left;
+    }
 }
 </style>

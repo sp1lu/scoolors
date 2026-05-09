@@ -106,14 +106,6 @@ const onCopyClicked = (text: string) => {
 <style lang='scss'>
 @use '@/shared/styles' as *;
 
-.color-view {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100dvw;
-    min-height: 100dvh;
-}
-
 .color-view__content {
     flex: 1;
     display: flex;
