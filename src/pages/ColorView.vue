@@ -61,7 +61,7 @@ const onCopyClicked = (text: string) => {
 </script>
 
 <template>
-    <div class="color-view">
+    <div class="view color-view">
         <Header>
             <template #left>
                 <AppLogo />
@@ -112,7 +112,6 @@ const onCopyClicked = (text: string) => {
     flex-direction: column;
     width: 100dvw;
     min-height: 100dvh;
-    padding: 0 8%;
 }
 
 .color-view__content {
