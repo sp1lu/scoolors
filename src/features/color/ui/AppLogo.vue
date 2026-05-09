@@ -33,8 +33,8 @@
 }
 
 .pictogram__stripe {
-    height: 8px;
-    width: 24px;
+    height: 7px;
+    width: 21px;
     background-color: var(--primary-500);
 }
 
@@ -49,7 +49,7 @@
 }
 
 .logotype {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 </style>

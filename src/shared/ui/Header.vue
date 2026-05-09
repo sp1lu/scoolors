@@ -43,14 +43,8 @@
 
 @media screen and (max-width: 992px) {
     .header {
-        display: flex;
-        flex-direction: column;
         height: fit-content;
         padding: 16px 0;
-    }
-
-    .header>* {
-        justify-content: center;
     }
 }
 </style>
