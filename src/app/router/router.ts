@@ -1,8 +1,8 @@
 /* Dependencies */
-import { createMemoryHistory, createRouter, type RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 
 /* Views */
-import { ColorView } from '../../pages'
+import { AboutView, ColorView } from '../../pages'
 
 /* Routes */
 const routes: RouteRecordRaw[] = [
@@ -11,13 +11,17 @@ const routes: RouteRecordRaw[] = [
         component: ColorView
     },
     {
-        path: '/pathMatch(.*)*',
+        path: '/about',
+        component: AboutView
+    },
+    {
+        path: '/:pathMatch(.*)*',
         component: ColorView
     }
 ]
 
 /* Router */
 export const router = createRouter({
-    history: createMemoryHistory(),
+    history: createWebHashHistory(),
     routes
 })

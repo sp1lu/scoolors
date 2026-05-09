@@ -2,17 +2,23 @@
 </script>
 
 <template>
-    <div class="logo">
-        <ul class="pictogram">
-            <li class="pictogram__stripe pictogram__first"></li>
-            <li class="pictogram__stripe pictogram__mid"></li>
-            <li class="pictogram__stripe pictogram__last"></li>
-        </ul>
-        <span class="logotype">scoolors</span>
-    </div>
+    <RouterLink to="/" class="logo-link">
+        <div class="logo">
+            <ul class="pictogram">
+                <li class="pictogram__stripe pictogram__first"></li>
+                <li class="pictogram__stripe pictogram__mid"></li>
+                <li class="pictogram__stripe pictogram__last"></li>
+            </ul>
+            <span class="logotype">scoolors</span>
+        </div>
+    </RouterLink>
 </template>
 
 <style>
+.logo-link {
+    text-decoration: none;
+}
+
 .logo {
     display: flex;
     align-items: center;

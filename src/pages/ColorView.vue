@@ -63,8 +63,11 @@ const onCopyClicked = (text: string) => {
 <template>
     <div class="color-view">
         <Header>
-            <template #center>
+            <template #left>
                 <AppLogo />
+            </template>
+            <template #right>
+                <RouterLink to="/about">About</RouterLink>
             </template>
         </Header>
         <div class="color-view__content">
