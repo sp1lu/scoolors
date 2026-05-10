@@ -6,13 +6,13 @@ import { computed, ref, watch } from 'vue'
 import type { ColorStyle, ColorSpace } from '../features/color'
 
 /* Config */
-import { COLOR_SPACES, COLOR_STYLES, convertToHexScale, createFavicon, generateStyleVariablesFromScales } from '../features/color'
+import { COLOR_SPACES, COLOR_STYLES } from '../features/color'
 
 /** Lib */
 import { copyToClipboard } from '../shared/lib'
 
 /* Model */
-import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales } from '../features/color'
+import { generateColorScale, generateNeutralScale, hexToOklch, generateRootStyleFromScales, convertToHexScale, createFavicon, generateStyleVariablesFromScales } from '../features/color'
 import { useTheme } from '../features/theme'
 import { useSnackbars } from '../features/snackbar'
 

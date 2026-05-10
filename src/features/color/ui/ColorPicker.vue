@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 /* Inputs */
-const props = defineProps<{
+const { color } = defineProps<{
     color: string
 }>();
 
@@ -16,21 +16,28 @@ const onInput = (event: Event) => {
     emit('color-changed', value);
 }
 
-const onBtnClick = (text: string) => {
-    emit('text-copied', text);
+const onBtnClick = () => {
+    emit('text-copied', color);
 }
 </script>
 
 <template>
     <div class="color-picker">
-        <input type="color" id="color-picker" class="color-picker__input" :value="props.color" @input="onInput">
+        <input type="color" id="color-picker" class="color-picker__input" :value="color" @input="onInput">
         <label for="color-picker" class="color-picker__label pulse"
-            :style="{ backgroundColor: props.color, '--shadow-color': props.color }">
+            :style="{ backgroundColor: color, '--shadow-color': color }">
         </label>
-        <button type="button" class="btn-icon color-value" @click="onBtnClick(color)">
-            <span class="color-value__label">{{ props.color.toUpperCase() }}</span>
+        <!-- <button type="button" class="btn-icon color-value" @click="onBtnClick">
+            <span class="color-value__label">{{ color.toUpperCase() }}</span>
             <span class="color-value__icon"></span>
-        </button>
+        </button> -->
+
+        <div class="color-value">
+            <label for="color-picker" class="color-value__label">{{ color.toUpperCase() }}</label>
+            <button type="button" class="color-value__btn" @click="onBtnClick">
+                <span class="color-value__icon"></span>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -62,9 +69,35 @@ const onBtnClick = (text: string) => {
     box-shadow: 0px 0px 1px 1px #0000001a;
 }
 
+.color-value,
+.color-value__label,
+.color-value__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .color-value {
+    height: 32px;
+}
+
+.color-value__label,
+.color-value__btn {
+    cursor: pointer;
+}
+
+.color-value__label {
+    font-size: 1.33rem;
+    height: 100%;
+    padding: 0;
+}
+
+.color-value__btn {
+    padding: 0;
+    border: none;
+    width: 32px;
+    height: 32px;
     background-color: transparent;
-    border: 1px solid transparent;
 
     &:hover {
         border: 1px solid var(--primary-100);
@@ -75,12 +108,8 @@ const onBtnClick = (text: string) => {
     }
 }
 
-.color-value__label {
-    font-size: 1.33rem;
-}
-
 .color-value__icon {
-    @include mask-icon('/icons/content_copy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg', 18px);
+    @include mask-icon('/icons/content_copy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg', 20px);
     background-color: var(--neutral-500);
 }
 
