@@ -1,0 +1,18 @@
+a {
+  color: var(--primary-500);
+}
+
+.menu-link {
+    color: var(--neutral-900);
+    text-decoration: none;
+    font-size: 1.15rem;
+    font-weight: 500;
+
+    &:hover {
+        color: var(--primary-500);
+    }
+
+    &:active {
+        color: var(--primary-600);
+    }
+}

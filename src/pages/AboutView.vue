@@ -11,7 +11,7 @@ import { Footer, Header } from '../shared/ui'
                 <AppLogo />
             </template>
             <template #right>
-                <RouterLink to="/">Scale</RouterLink>
+                <RouterLink to="/" class="menu-link">Scale</RouterLink>
             </template>
         </Header>
 

@@ -67,7 +67,7 @@ const onCopyClicked = (text: string) => {
                 <AppLogo />
             </template>
             <template #right>
-                <RouterLink to="/about">About</RouterLink>
+                <RouterLink to="/about" class="menu-link">About</RouterLink>
             </template>
         </Header>
         <div class="color-view__content">

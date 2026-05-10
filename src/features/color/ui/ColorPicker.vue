@@ -27,10 +27,6 @@ const onBtnClick = () => {
         <label for="color-picker" class="color-picker__label pulse"
             :style="{ backgroundColor: color, '--shadow-color': color }">
         </label>
-        <!-- <button type="button" class="btn-icon color-value" @click="onBtnClick">
-            <span class="color-value__label">{{ color.toUpperCase() }}</span>
-            <span class="color-value__icon"></span>
-        </button> -->
 
         <div class="color-value">
             <label for="color-picker" class="color-value__label">{{ color.toUpperCase() }}</label>
