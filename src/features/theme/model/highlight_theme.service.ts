@@ -14,8 +14,8 @@ export const setHighlightTheme = (theme: Theme) => {
     link.rel = 'stylesheet';
     link.href = theme === 'light' ?
         // '/highlight/github.css' :
-        '/highlight/vs2015.css' :
-        '/highlight/vs2015.css'
+        './highlight/vs2015.css' :
+        './highlight/vs2015.css'
 
     document.head.appendChild(link);
 }
