@@ -59,6 +59,7 @@ const onBtnClick = (text: string) => {
 .style-editor__text {
     margin: 0;
     padding: 48px;
+    width: 100%;
 }
 
 .action-copy {
@@ -75,7 +76,9 @@ const onBtnClick = (text: string) => {
 
 @media screen and (max-width: 992px) {
     .style-editor {
-        min-width: min-content;
+        min-width: unset;
+        width: 100%;
+        overflow-x: auto;
     }
 }
 </style>
