@@ -72,7 +72,7 @@ import { Footer, Header } from '../shared/ui'
                 <div class="footer__credits">
                     <span>© {{ new Date().getFullYear() }} scoolors</span><span>&#8226;</span>
                     <a href="https://daviderivolta.com/" target="_blank">Davide Rivolta</a><span>&#8226;</span>
-                    <a href="https://github.com/sp1lu/coolors" target="_blank">GitHub</a>
+                    <a href="https://github.com/sp1lu/scoolors/" target="_blank">GitHub</a>
                 </div>
             </template>
         </Footer>
