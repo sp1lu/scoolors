@@ -26,17 +26,23 @@ const onElementClick = (color: string) => emit('text-copied', color);
     gap: 8px;
 }
 
-.color-scale__element {
+.element__btn {
     cursor: pointer;
     width: 320px;
     height: 40px;
     display: grid;
+    padding: 0;
+    background-color: var(--bg-color);
     grid-template-columns: 1fr 4fr 2fr;
     border: 1px solid var(--neutral-500);
     border-radius: 8px;
+
+    &:active {
+        background-color: oklch(from var(--bg-color) calc(l - 0.08) c h);
+    }
 }
 
-.color-scale__element > * {
+.element__btn>* {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,8 +57,12 @@ const onElementClick = (color: string) => emit('text-copied', color);
     border-radius: 0 7px 7px 0;
 }
 
+.element__btn:active .element__color {
+    background-color: var(--neutral-200);
+}
+
 .color-scale__element:nth-child(n+7) .element__step {
-    color: var(--neutral-100);   
+    color: var(--neutral-100);
 }
 
 @media screen and (max-width: 992px) {
@@ -68,10 +78,12 @@ const onElementClick = (color: string) => emit('text-copied', color);
 
 <template>
     <ul class="color-scale">
-        <li class="color-scale__element" v-for="(color, step) in scale" :style="{ backgroundColor: color }" @click="onElementClick(color)">
-            <div class="element__step">{{ step }}</div>
-            <div class="element__bg"></div>
-            <div class="element__color">{{ color }}</div>
+        <li class="color-scale__element" v-for="(color, step) in scale">
+            <button type="button" class="element__btn" :style="{ '--bg-color': color }" @click="onElementClick(color)">
+                <div class="element__step">{{ step }}</div>
+                <div class="element__bg"></div>
+                <div class="element__color">{{ color }}</div>
+            </button>
         </li>
     </ul>
 </template>
